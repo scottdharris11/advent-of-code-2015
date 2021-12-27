@@ -24,7 +24,7 @@ func solvePart1(lines []string) int {
 		ans += PaperRequired(line)
 	}
 	end := time.Now().UnixMilli()
-	log.Printf("Day 1, Part 1 (%dms): Paper Required = %d", end-start, ans)
+	log.Printf("Day 2, Part 1 (%dms): Paper Required = %d", end-start, ans)
 	return ans
 }
 
@@ -35,7 +35,7 @@ func solvePart2(lines []string) int {
 		ans += RibbonRequired(line)
 	}
 	end := time.Now().UnixMilli()
-	log.Printf("Day 1, Part 2 (%dms): Ribbon Required = %d", end-start, ans)
+	log.Printf("Day 2, Part 2 (%dms): Ribbon Required = %d", end-start, ans)
 	return ans
 }
 
