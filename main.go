@@ -1,6 +1,9 @@
 package main
 
-import "advent-of-code-2015/day1"
+import (
+	"advent-of-code-2015/day1"
+	"advent-of-code-2015/day2"
+)
 
 type Solver interface {
 	Solve()
@@ -8,7 +11,7 @@ type Solver interface {
 
 func main() {
 	solvers := []Solver{
-		day1.Puzzle{},
+		day1.Puzzle{}, day2.Puzzle{},
 	}
 	for _, solver := range solvers {
 		solver.Solve()
