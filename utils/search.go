@@ -36,7 +36,6 @@ func (s *Search) Best(init SearchMove) *SearchSolution {
 	var goal interface{}
 	for !searchQueue.Empty() {
 		var current = searchQueue.Next()
-		// log.Println(current.String())
 		if s.Searcher.Goal(current) {
 			goal = current
 			break
