@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"encoding/json"
 	"errors"
 	"log"
 	"os"
@@ -21,6 +22,21 @@ func ReadLines(dir string, filename string) []string {
 		values = append(values, scanner.Text())
 	}
 	return values
+}
+
+// ParseJSON parses supplied data into JSON object
+func ParseJSON(data string) interface{} {
+	jsonObj := make(map[string]interface{})
+	err := json.Unmarshal([]byte(data), &jsonObj)
+	if err != nil {
+		jsonArray := make([]interface{}, 0)
+		err = json.Unmarshal([]byte(data), &jsonArray)
+		if err != nil {
+			log.Fatalln("error parsing file: ", err)
+		}
+		return jsonArray
+	}
+	return jsonObj
 }
 
 // ReadIntegers read lines from data file as integers
