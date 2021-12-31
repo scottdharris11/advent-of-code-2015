@@ -10,11 +10,11 @@ import (
 )
 
 func TestSolvePart1(t *testing.T) {
-	assert.Equal(t, 346386, solvePart1(utils.ReadLines("day4", "day-4-input.txt")))
+	assert.Equal(t, int64(346386), solvePart1(utils.ReadLines("day4", "day-4-input.txt")))
 }
 
 func TestSolvePart2(t *testing.T) {
-	assert.Equal(t, 9958218, solvePart2(utils.ReadLines("day4", "day-4-input.txt")))
+	assert.Equal(t, int64(9958218), solvePart2(utils.ReadLines("day4", "day-4-input.txt")))
 }
 
 func TestLowestWithPrefix(t *testing.T) {
@@ -30,7 +30,7 @@ func TestLowestWithPrefix(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, LowestWithPrefix(tt.key, tt.prefix, 0))
+			assert.Equal(t, int64(tt.expected), LowestWithPrefix(tt.key, tt.prefix, 0))
 		})
 	}
 }
@@ -53,7 +53,7 @@ func TestLeadingPrefix(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			prefix := []byte(tt.prefix)
 			buffer := make([]byte, hex.EncodedLen(len(prefix)))
-			assert.Equal(t, tt.expected, LeadingPrefix(tt.key, tt.number, prefix, buffer))
+			assert.Equal(t, tt.expected, LeadingPrefix([]byte(tt.key), int64(tt.number), prefix, buffer))
 		})
 	}
 }

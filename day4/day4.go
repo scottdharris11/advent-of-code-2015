@@ -18,7 +18,7 @@ func (Puzzle) Solve() {
 	solvePart2(input)
 }
 
-func solvePart1(lines []string) int {
+func solvePart1(lines []string) int64 {
 	start := time.Now().UnixMilli()
 	ans := LowestWithPrefix(lines[0], "00000", 0)
 	end := time.Now().UnixMilli()
@@ -26,7 +26,7 @@ func solvePart1(lines []string) int {
 	return ans
 }
 
-func solvePart2(lines []string) int {
+func solvePart2(lines []string) int64 {
 	start := time.Now().UnixMilli()
 	ans := LowestWithPrefix(lines[0], "000000", 346386)
 	end := time.Now().UnixMilli()
@@ -34,12 +34,13 @@ func solvePart2(lines []string) int {
 	return ans
 }
 
-func LowestWithPrefix(key string, pre string, start int) int {
-	d := start
+func LowestWithPrefix(key string, pre string, start int) int64 {
+	d := int64(start)
 	prefix := []byte(pre)
 	buffer := make([]byte, hex.EncodedLen(len(prefix)))
+	keyBytes := []byte(key)
 	for {
-		if LeadingPrefix(key, d, prefix, buffer) {
+		if LeadingPrefix(keyBytes, d, prefix, buffer) {
 			break
 		}
 		d++
@@ -47,9 +48,8 @@ func LowestWithPrefix(key string, pre string, start int) int {
 	return d
 }
 
-func LeadingPrefix(key string, d int, prefix []byte, buffer []byte) bool {
-	data := []byte(key + strconv.Itoa(d))
-	bytes := md5.Sum(data)
+func LeadingPrefix(key []byte, d int64, prefix []byte, buffer []byte) bool {
+	bytes := md5.Sum(strconv.AppendInt(key, d, 10))
 	hex.Encode(buffer, bytes[:len(prefix)])
 	for i, b := range prefix {
 		if buffer[i] != b {
