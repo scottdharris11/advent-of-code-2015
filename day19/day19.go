@@ -37,7 +37,7 @@ func solvePart1(lines []string) int {
 	}
 	end := time.Now().UnixMilli()
 	distinct := len(nValues)
-	log.Printf("Day 19, Part 1 (%dms): Lights On = %d", end-start, distinct)
+	log.Printf("Day 19, Part 1 (%dms): Distinct = %d", end-start, distinct)
 	return distinct
 }
 
@@ -53,7 +53,7 @@ func solvePart2(lines []string) int {
 	visited := make(map[string]int)
 	steps := reduce(goal, "e", 0, -1, rr, visited)
 	end := time.Now().UnixMilli()
-	log.Printf("Day 19, Part 2 (%dms): Result = %d", end-start, steps)
+	log.Printf("Day 19, Part 2 (%dms): Steps = %d", end-start, steps)
 	return steps
 }
 
