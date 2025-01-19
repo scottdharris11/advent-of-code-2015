@@ -13,6 +13,5 @@ func TestSolvePart1(t *testing.T) {
 }
 
 func TestSolvePart2(t *testing.T) {
-	assert.Equal(t, 0, solvePart2(&Player{HitPoints: 13, Damage: 8}, &Player{HitPoints: 10, Mana: 250}))
-	assert.Equal(t, 0, solvePart2(&Player{HitPoints: 58, Damage: 9}, &Player{HitPoints: 50, Mana: 500}))
+	assert.Equal(t, 1309, solvePart2(&Player{HitPoints: 58, Damage: 9}, &Player{HitPoints: 50, Mana: 500}))
 }

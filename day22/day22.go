@@ -22,16 +22,20 @@ func solvePart1(boss *Player, player *Player) int {
 
 func solvePart2(boss *Player, player *Player) int {
 	start := time.Now().UnixMilli()
-	result := 0
+	lowest := playTurn(GameState{Boss: boss, Player: player, Cost: 0, Hard: true}, true, -1)
 	end := time.Now().UnixMilli()
-	log.Printf("Day 22, Part 2 (%dms): Result = %d", end-start, result)
-	return result
+	log.Printf("Day 22, Part 2 (%dms): Lowest Cost = %d", end-start, lowest)
+	return lowest
 }
 
 func playTurn(state GameState, playerTurn bool, lowest int) int {
+	// if hard, remove a hit from player
+	if state.Hard {
+		state.Player.HitPoints--
+	}
+
 	// check end state
 	if state.Boss.HitPoints <= 0 {
-		// log.Printf("Player wins with moves: %v", strings.Join(state.Moves, ", "))
 		return state.Cost
 	}
 	if state.Player.HitPoints <= 0 {
@@ -48,7 +52,6 @@ func playTurn(state GameState, playerTurn bool, lowest int) int {
 
 	// check boss end state again to see if pre-effects have won
 	if state.Boss.HitPoints <= 0 {
-		// log.Printf("Player wins with moves: %v", strings.Join(state.Moves, ", "))
 		return state.Cost
 	}
 
@@ -116,6 +119,7 @@ type GameState struct {
 	Player *Player
 	Cost   int
 	Moves  []string
+	Hard   bool
 }
 
 func (g GameState) playerMoves() []GameState {
@@ -183,5 +187,5 @@ func (g GameState) copy() GameState {
 	}
 	m := make([]string, len(g.Moves))
 	copy(m, g.Moves)
-	return GameState{Boss: &b, Player: &p, Cost: g.Cost, Moves: m}
+	return GameState{Boss: &b, Player: &p, Cost: g.Cost, Hard: g.Hard, Moves: m}
 }
