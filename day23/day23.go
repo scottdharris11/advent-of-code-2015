@@ -13,22 +13,24 @@ type Puzzle struct{}
 func (Puzzle) Solve() {
 	input := utils.ReadLines("day23", "day-23-input.txt")
 	solvePart1(input, "b")
-	solvePart2(input)
+	solvePart2(input, "b")
 }
 
 func solvePart1(lines []string, register string) int {
 	start := time.Now().UnixMilli()
 	instructions := parseInstructions(lines)
-	registers := runProgram(instructions)
+	registers := runProgram(instructions, 0)
 	result := registers[register]
 	end := time.Now().UnixMilli()
 	log.Printf("Day 23, Part 1 (%dms): Result = %d", end-start, result)
 	return result
 }
 
-func solvePart2(lines []string) int {
+func solvePart2(lines []string, register string) int {
 	start := time.Now().UnixMilli()
-	result := 0
+	instructions := parseInstructions(lines)
+	registers := runProgram(instructions, 1)
+	result := registers[register]
 	end := time.Now().UnixMilli()
 	log.Printf("Day 23, Part 2 (%dms): Result = %d", end-start, result)
 	return result
@@ -70,8 +72,8 @@ func parseInstructions(lines []string) []Instruction {
 	return instructions
 }
 
-func runProgram(instructions []Instruction) map[string]int {
-	registers := map[string]int{"a": 0, "b": 0}
+func runProgram(instructions []Instruction, a int) map[string]int {
+	registers := map[string]int{"a": a, "b": 0}
 	idx := 0
 	for {
 		if idx < 0 || idx >= len(instructions) {
