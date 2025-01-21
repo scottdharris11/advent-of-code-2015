@@ -3,7 +3,6 @@ package day24
 import (
 	"advent-of-code-2015/utils"
 	"log"
-	"math"
 	"time"
 )
 
@@ -34,7 +33,7 @@ func solvePart2(weights []int) int {
 
 func balanced(weights []int, c *Configuration, best *Configuration) *Configuration {
 	if c.boxesRemaining == 0 {
-		if c.balance == 0 && c.better(best) {
+		if c.balanced() && c.better(best) {
 			best = c.copy()
 		}
 		return best
@@ -55,25 +54,38 @@ func NewConfiguration(boxes []int, containerCount int) *Configuration {
 	containers := make([][]int, containerCount)
 	weights := make([]int, containerCount)
 	c := &Configuration{boxesRemaining: len(boxes), containers: containers, weights: weights, quantum: 1}
+	totalWeight := 0
 	for _, b := range boxes {
-		c.weightToDistribute += b
+		totalWeight += b
 	}
+	c.balanceWeight = totalWeight / containerCount
+	c.maxFirstContainer = len(boxes) / containerCount
 	return c
 }
 
 type Configuration struct {
-	weightToDistribute int
-	boxesRemaining     int
-	containers         [][]int
-	weights            []int
-	balance            int
-	quantum            int
+	balanceWeight     int
+	maxFirstContainer int
+	boxesRemaining    int
+	containers        [][]int
+	weights           []int
+	quantum           int
 }
 
 func (c *Configuration) stillPossible(best *Configuration) bool {
-	if c.weightToDistribute < c.balance {
+	// not possible if any weight goes above balance weight or length
+	// of first container exceeds the max
+	for _, weight := range c.weights {
+		if weight > c.balanceWeight {
+			return false
+		}
+	}
+	c1Length := len(c.containers[0])
+	if c1Length > c.maxFirstContainer {
 		return false
 	}
+
+	// if best exists, see if we have eclipsed anything within it
 	if best == nil {
 		return true
 	}
@@ -92,27 +104,40 @@ func (c *Configuration) stillPossible(best *Configuration) bool {
 }
 
 func (c *Configuration) better(best *Configuration) bool {
+	c1Len := len(c.containers[0])
+	for i := 1; i < len(c.containers); i++ {
+		if c1Len > len(c.containers[i]) {
+			return false
+		}
+	}
 	if best == nil {
 		return true
 	}
-	if len(c.containers[0]) > len(best.containers[0]) {
+	if c1Len > len(best.containers[0]) {
 		return false
 	}
-	if len(c.containers[0]) < len(best.containers[0]) {
+	if c1Len < len(best.containers[0]) {
 		return true
 	}
 	return c.quantum < best.quantum
 }
 
+func (c *Configuration) balanced() bool {
+	for _, weight := range c.weights {
+		if weight != c.balanceWeight {
+			return false
+		}
+	}
+	return true
+}
+
 func (c *Configuration) boxToContainer(box int, container int) {
 	c.boxesRemaining--
-	c.weightToDistribute -= box
 	c.containers[container] = append(c.containers[container], box)
 	c.weights[container] += box
 	if container == 0 {
 		c.quantum *= box
 	}
-	c.updateBalance()
 }
 
 func (c *Configuration) removeLastBoxFromContainer(container int) {
@@ -125,17 +150,6 @@ func (c *Configuration) removeLastBoxFromContainer(container int) {
 	if container == 0 {
 		c.quantum /= weight
 	}
-	c.weightToDistribute += weight
-	c.updateBalance()
-}
-
-func (c *Configuration) updateBalance() {
-	c1Weight := c.weights[0]
-	balance := 0
-	for i := 1; i < len(c.weights); i++ {
-		balance += int(math.Abs(float64(c1Weight - c.weights[i])))
-	}
-	c.balance = balance
 }
 
 func (c *Configuration) copy() *Configuration {
@@ -148,11 +162,11 @@ func (c *Configuration) copy() *Configuration {
 		weights[i] = c.weights[i]
 	}
 	return &Configuration{
-		weightToDistribute: c.weightToDistribute,
-		boxesRemaining:     c.boxesRemaining,
-		containers:         containers,
-		weights:            weights,
-		balance:            c.balance,
-		quantum:            c.quantum,
+		balanceWeight:     c.balanceWeight,
+		maxFirstContainer: c.maxFirstContainer,
+		boxesRemaining:    c.boxesRemaining,
+		containers:        containers,
+		weights:           weights,
+		quantum:           c.quantum,
 	}
 }
