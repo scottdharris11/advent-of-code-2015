@@ -15,7 +15,7 @@ func solvePart1(row int, col int) int {
 	start := time.Now().UnixMilli()
 	code := code(codeNumber(row, col))
 	end := time.Now().UnixMilli()
-	log.Printf("Day 24, Part 1 (%dms): Code = %d", end-start, code)
+	log.Printf("Day 25, Part 1 (%dms): Code = %d", end-start, code)
 	return code
 }
 

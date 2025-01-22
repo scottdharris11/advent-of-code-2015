@@ -10,6 +10,7 @@ import (
 func TestSolvePart1(t *testing.T) {
 	assert.Equal(t, 9380097, solvePart1(4, 4))
 	assert.Equal(t, 27995004, solvePart1(6, 6))
+	assert.Equal(t, 9250759, solvePart1(5, 5))
 	assert.Equal(t, 2650453, solvePart1(2978, 3083))
 }
 
