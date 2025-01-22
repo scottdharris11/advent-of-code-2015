@@ -17,7 +17,6 @@ func (Puzzle) Solve() {
 func solvePart1(weights []int) int {
 	start := time.Now().UnixMilli()
 	best := balanced(weights, NewConfiguration(weights, 3), nil)
-	log.Printf("Best: %+v", *best)
 	end := time.Now().UnixMilli()
 	log.Printf("Day 24, Part 1 (%dms): Result = %d", end-start, best.quantum)
 	return best.quantum
@@ -25,10 +24,10 @@ func solvePart1(weights []int) int {
 
 func solvePart2(weights []int) int {
 	start := time.Now().UnixMilli()
-	result := 0
+	best := balanced(weights, NewConfiguration(weights, 4), nil)
 	end := time.Now().UnixMilli()
-	log.Printf("Day 24, Part 2 (%dms): Result = %d", end-start, result)
-	return result
+	log.Printf("Day 24, Part 2 (%dms): Result = %d", end-start, best.quantum)
+	return best.quantum
 }
 
 func balanced(weights []int, c *Configuration, best *Configuration) *Configuration {
@@ -42,7 +41,7 @@ func balanced(weights []int, c *Configuration, best *Configuration) *Configurati
 		return best
 	}
 	box := weights[c.boxesRemaining-1]
-	for container := 0; container < 3; container++ {
+	for container := range c.containers {
 		c.boxToContainer(box, container)
 		best = balanced(weights, c, best)
 		c.removeLastBoxFromContainer(container)
